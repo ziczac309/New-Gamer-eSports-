@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GAMER ESPORTS - Free Fire Tournaments</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ff4655',
+            darkBg: '#0f1115',
+            cardBg: '#181b20',
+            cardBorder: '#23272e',
+            accent: '#00e676'
+          },
+          fontFamily: {
+            rajdhani: ['Rajdhani', 'sans-serif'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-[#0b0c0e] text-gray-100 flex justify-center min-h-screen antialiased">
+
+  <!-- Mobile Screen Shell (Max 480px Centered on Desktop) -->
+  <div class="w-full max-w-md bg-darkBg min-h-screen flex flex-col relative pb-20 shadow-2xl border-x border-cardBorder">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-cardBorder">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center font-rajdhani font-bold text-xl text-white shadow-md shadow-primary/30">
+          G
+        </div>
+        <div>
+          <h1 class="font-rajdhani font-bold text-lg tracking-wider uppercase leading-none text-white">GAMER ESPORTS</h1>
+          <p id="user-greeting" class="text-xs text-gray-400 font-medium">Welcome Back 👋</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="bg-cardBg border border-cardBorder px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-inner">
+          <i class="fa-solid fa-wallet text-accent text-xs"></i>
+          <span id="header-wallet-balance" class="font-bold text-xs text-white">₹0.00</span>
+        </div>
+        <button id="btn-notifications" class="text-gray-400 hover:text-white relative">
+          <i class="fa-regular fa-bell text-lg"></i>
+          <span id="notif-badge" class="hidden absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrolling Announcement Bar -->
+    <div class="bg-primary/10 border-y border-primary/20 py-1.5 px-3 overflow-hidden whitespace-nowrap">
+      <div id="announcement-text" class="inline-block animate-marquee text-xs font-semibold text-primary tracking-wide">
+        🔥 Welcome to GAMER ESPORTS • Daily Free Fire Tournaments • Fair Play Guaranteed • Fast Withdrawals
+      </div>
+    </div>
+
+    <!-- Dynamic Main Views Container -->
+    <main class="flex-1 overflow-y-auto no-scrollbar">
+
+      <!-- ================= HOME TAB ================= -->
+      <section id="view-home" class="p-4 space-y-5">
+        
+        <!-- Hero Banner Carousel -->
+        <div class="relative w-full h-44 rounded-2xl overflow-hidden bg-cardBg border border-cardBorder shadow-lg">
+          <div id="banner-slider" class="w-full h-full flex transition-transform duration-500">
+            <!-- Dynamic Banners populated via Firebase -->
+            <div class="min-w-full h-full bg-gradient-to-r from-red-600 to-primary flex flex-col justify-end p-4">
+              <span class="bg-black/60 text-[10px] uppercase tracking-widest px-2 py-0.5 rounded font-bold w-max mb-1">Mega Event</span>
+              <h2 class="text-xl font-rajdhani font-bold leading-tight">FREE FIRE PRO LEAGUE 2026</h2>
+              <p class="text-xs text-gray-200">Win from ₹50,000 Prize Pool</p>
+            </div>
+          </div>
+          <!-- Slider Dots -->
+          <div id="banner-dots" class="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5"></div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-4 gap-2">
+          <button onclick="switchTab('play')" class="flex flex-col items-center justify-center p-3 rounded-xl bg-cardBg border border-cardBorder hover:border-primary/50 transition">
+            <div class="w-10 h-10 rounded-full bg-yellow-500/10 text-yellow-500 flex items-center justify-center mb-1.5">
+              <i class="fa-solid fa-trophy text-base"></i>
+            </div>
+            <span class="text-[11px] font-semibold">Tournaments</span>
+          </button>
+          <button onclick="switchTab('wallet')" class="flex flex-col items-center justify-center p-3 rounded-xl bg-cardBg border border-cardBorder hover:border-primary/50 transition">
+            <div class="w-10 h-10 rounded-full bg-accent/10 text-accent flex items-center justify-center mb-1.5">
+              <i class="fa-solid fa-wallet text-base"></i>
+            </div>
+            <span class="text-[11px] font-semibold">Wallet</span>
+          </button>
+          <button onclick="openModal('rewardsModal')" class="flex flex-col items-center justify-center p-3 rounded-xl bg-cardBg border border-cardBorder hover:border-primary/50 transition">
+            <div class="w-10 h-10 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center mb-1.5">
+              <i class="fa-solid fa-gift text-base"></i>
+            </div>
+            <span class="text-[11px] font-semibold">Rewards</span>
+          </button>
+          <button onclick="openModal('referModal')" class="flex flex-col items-center justify-center p-3 rounded-xl bg-cardBg border border-cardBorder hover:border-primary/50 transition">
+            <div class="w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center mb-1.5">
+              <i class="fa-solid fa-users text-base"></i>
+            </div>
+            <span class="text-[11px] font-semibold">Refer & Earn</span>
+          </button>
+        </div>
+
+        <!-- Popular Game Categories -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-rajdhani font-bold text-base text-gray-200 uppercase tracking-wider">Game Modes</h3>
+            <span class="text-xs text-primary font-medium cursor-pointer" onclick="switchTab('play')">See All</span>
+          </div>
+          <div class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
+            <button onclick="filterGameMode('All')" class="mode-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-primary text-white whitespace-nowrap shadow-sm">All</button>
+            <button onclick="filterGameMode('Battle Royale')" class="mode-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-cardBg border border-cardBorder text-gray-300 whitespace-nowrap">Battle Royale</button>
+            <button onclick="filterGameMode('Clash Squad')" class="mode-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-cardBg border border-cardBorder text-gray-300 whitespace-nowrap">Clash Squad</button>
+            <button onclick="filterGameMode('Lone Wolf')" class="mode-pill px-4 py-1.5 rounded-full text-xs font-semibold bg-cardBg border border-cardBorder text-gray-300 whitespace-nowrap">Lone Wolf</button>
+          </div>
+        </div>
+
+        <!-- Featured Tournament Card -->
+        <div id="featured-tournament-container">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Live / Upcoming Tournaments Section -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-rajdhani font-bold text-base text-gray-200 uppercase tracking-wider">Live & Upcoming Matches</h3>
+          </div>
+          <div id="home-tournaments-list" class="space-y-3">
+            <!-- Dynamic Tournament Cards Loaded Here -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= PLAY / TOURNAMENTS TAB ================= -->
+      <section id="view-play" class="p-4 space-y-4 hidden">
+        <div class="flex items-center justify-between">
+          <h2 class="font-rajdhani font-bold text-xl uppercase">Tournaments</h2>
+          <div class="relative w-40">
+            <input type="text" id="tournament-search" placeholder="Search..." class="w-full bg-cardBg border border-cardBorder text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-primary pl-7 text-white" />
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-gray-400 text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Status Filter Tabs -->
+        <div class="flex border-b border-cardBorder text-xs font-semibold">
+          <button onclick="filterPlayStatus('all')" class="play-tab flex-1 py-2 text-center border-b-2 border-primary text-primary">All</button>
+          <button onclick="filterPlayStatus('live')" class="play-tab flex-1 py-2 text-center text-gray-400">Live</button>
+          <button onclick="filterPlayStatus('upcoming')" class="play-tab flex-1 py-2 text-center text-gray-400">Upcoming</button>
+          <button onclick="filterPlayStatus('my')" class="play-tab flex-1 py-2 text-center text-gray-400">My Matches</button>
+        </div>
+
+        <!-- Tournaments Grid / List -->
+        <div id="play-tournaments-list" class="space-y-3">
+          <!-- Dynamic Items -->
+        </div>
+      </section>
+
+      <!-- ================= WALLET TAB ================= -->
+      <section id="view-wallet" class="p-4 space-y-5 hidden">
+        <!-- Balance Card -->
+        <div class="bg-gradient-to-br from-cardBg to-[#1f242c] p-5 rounded-2xl border border-cardBorder text-center shadow-lg relative overflow-hidden">
+          <p class="text-xs text-gray-400 uppercase font-semibold tracking-wider">Available Balance</p>
+          <h2 id="wallet-balance-main" class="text-3xl font-rajdhani font-bold text-white mt-1 mb-4">₹0.00</h2>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="openModal('addCashModal')" class="py-2.5 bg-accent text-darkBg font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 hover:bg-opacity-90">
+              <i class="fa-solid fa-plus text-xs"></i> ADD CASH
+            </button>
+            <button onclick="openModal('withdrawModal')" class="py-2.5 bg-cardBg border border-cardBorder text-white font-bold text-xs rounded-xl hover:bg-cardBorder flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> WITHDRAW
+            </button>
+          </div>
+        </div>
+
+        <!-- Transactions History -->
+        <div>
+          <h3 class="font-rajdhani font-bold text-base uppercase tracking-wider mb-3">Transaction History</h3>
+          <div id="transactions-list" class="space-y-2">
+            <!-- Dynamic Transactions -->
+            <p class="text-center text-xs text-gray-500 py-6">No recent transactions found.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PROFILE TAB ================= -->
+      <section id="view-profile" class="p-4 space-y-4 hidden">
+        <!-- User Info -->
+        <div class="flex items-center gap-3.5 bg-cardBg p-4 rounded-2xl border border-cardBorder">
+          <div class="w-14 h-14 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center text-primary font-bold text-xl">
+            <i class="fa-solid fa-user-ninja"></i>
+          </div>
+          <div>
+            <h3 id="profile-username" class="font-bold text-base">Guest User</h3>
+            <p id="profile-email" class="text-xs text-gray-400">guest@gameresports.com</p>
+            <span class="inline-block mt-1 text-[10px] font-semibold bg-cardBorder text-accent px-2 py-0.5 rounded">Player</span>
+          </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-cardBg p-3 rounded-xl border border-cardBorder">
+            <p class="text-[10px] text-gray-400 font-semibold uppercase">Matches</p>
+            <h4 id="stat-matches" class="text-lg font-rajdhani font-bold mt-0.5">0</h4>
+          </div>
+          <div class="bg-cardBg p-3 rounded-xl border border-cardBorder">
+            <p class="text-[10px] text-gray-400 font-semibold uppercase">Total Wins</p>
+            <h4 id="stat-wins" class="text-lg font-rajdhani font-bold mt-0.5 text-accent">0</h4>
+          </div>
+          <div class="bg-cardBg p-3 rounded-xl border border-cardBorder">
+            <p class="text-[10px] text-gray-400 font-semibold uppercase">Winnings</p>
+            <h4 id="stat-winnings" class="text-lg font-rajdhani font-bold mt-0.5 text-yellow-500">₹0</h4>
+          </div>
+        </div>
+
+        <!-- Action Links -->
+        <div class="bg-cardBg rounded-xl border border-cardBorder divide-y divide-cardBorder text-xs font-medium">
+          <button onclick="openModal('referModal')" class="w-full p-3.5 flex items-center justify-between hover:bg-cardBorder/50">
+            <span class="flex items-center gap-2.5"><i class="fa-solid fa-share-nodes text-blue-400"></i> Refer & Earn</span>
+            <i class="fa-solid fa-chevron-right text-gray-500"></i>
+          </button>
+          <a href="admin.html" id="admin-panel-link" class="w-full p-3.5 flex items-center justify-between hover:bg-cardBorder/50 hidden">
+            <span class="flex items-center gap-2.5"><i class="fa-solid fa-shield-halved text-primary"></i> Admin Dashboard</span>
+            <i class="fa-solid fa-chevron-right text-gray-500"></i>
+          </a>
+          <a href="staff.html" id="staff-panel-link" class="w-full p-3.5 flex items-center justify-between hover:bg-cardBorder/50 hidden">
+            <span class="flex items-center gap-2.5"><i class="fa-solid fa-headset text-yellow-400"></i> Staff Match Portal</span>
+            <i class="fa-solid fa-chevron-right text-gray-500"></i>
+          </a>
+          <button onclick="handleLogout()" class="w-full p-3.5 flex items-center justify-between text-red-500 hover:bg-cardBorder/50">
+            <span class="flex items-center gap-2.5"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Fixed Bottom Navigation -->
+    <nav class="fixed bottom-0 w-full max-w-md bg-darkBg/95 backdrop-blur-md border-t border-cardBorder px-6 py-2 flex justify-between items-center z-50">
+      <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center text-primary">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-[10px] font-semibold mt-1">Home</span>
+      </button>
+      <button onclick="switchTab('play')" id="nav-play" class="nav-btn flex flex-col items-center text-gray-400 hover:text-white">
+        <i class="fa-solid fa-gamepad text-lg"></i>
+        <span class="text-[10px] font-semibold mt-1">Play</span>
+      </button>
+      <button onclick="switchTab('wallet')" id="nav-wallet" class="nav-btn flex flex-col items-center text-gray-400 hover:text-white">
+        <i class="fa-solid fa-wallet text-lg"></i>
+        <span class="text-[10px] font-semibold mt-1">Wallet</span>
+      </button>
+      <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn flex flex-col items-center text-gray-400 hover:text-white">
+        <i class="fa-solid fa-user text-lg"></i>
+        <span class="text-[10px] font-semibold mt-1">Profile</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- Tournament Details Modal -->
+  <div id="tournamentDetailModal" class="fixed inset-0 bg-black/80 z-50 flex items-end justify-center hidden">
+    <div class="w-full max-w-md bg-darkBg rounded-t-2xl border-t border-cardBorder max-h-[90vh] flex flex-col overflow-hidden">
+      <div class="relative h-36 bg-cardBg">
+        <img id="modal-banner" class="w-full h-full object-cover" src="" alt="Tournament Banner" />
+        <button onclick="closeModal('tournamentDetailModal')" class="absolute top-3 right-3 bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-4 flex-1 overflow-y-auto space-y-4 text-xs">
+        <div>
+          <h2 id="modal-title" class="font-rajdhani font-bold text-lg text-white"></h2>
+          <p id="modal-mode" class="text-gray-400"></p>
+        </div>
+
+        <!-- Credentials Room Section (Shown only if registered and provided) -->
+        <div id="modal-room-box" class="hidden bg-yellow-500/10 border border-yellow-500/30 p-3 rounded-xl space-y-1">
+          <p class="font-bold text-yellow-500 text-xs uppercase flex items-center gap-1.5">
+            <i class="fa-solid fa-key"></i> Room Details (Match ID & Pass)
+          </p>
+          <p class="text-gray-200">Room ID: <strong id="modal-room-id" class="text-white select-all"></strong></p>
+          <p class="text-gray-200">Password: <strong id="modal-room-pass" class="text-white select-all"></strong></p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 bg-cardBg p-3 rounded-xl border border-cardBorder text-center">
+          <div>
+            <span class="text-gray-400">Entry Fee</span>
+            <p id="modal-fee" class="font-bold text-white text-sm"></p>
+          </div>
+          <div>
+            <span class="text-gray-400">Prize Pool</span>
+            <p id="modal-prize" class="font-bold text-accent text-sm"></p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-white mb-1">Rules & Instructions</h4>
+          <ul id="modal-rules" class="list-disc pl-4 text-gray-400 space-y-1">
+            <li>No emulators or hacks allowed (Instant ban).</li>
+            <li>Join custom room at least 5 minutes before scheduled time.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="p-3 bg-darkBg border-t border-cardBorder">
+        <button id="btn-join-match" class="w-full py-3 bg-primary text-white font-rajdhani font-bold text-base uppercase rounded-xl tracking-wider hover:bg-opacity-90">
+          JOIN NOW
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deposit (Add Cash) Modal -->
+  <div id="addCashModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-sm bg-darkBg border border-cardBorder rounded-2xl p-5 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-rajdhani font-bold text-lg">Add Cash</h3>
+        <button onclick="closeModal('addCashModal')" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="bg-cardBg p-3 rounded-xl border border-cardBorder text-center">
+        <p class="text-xs text-gray-400">Pay via UPI to:</p>
+        <p class="font-bold text-accent text-sm select-all mt-1" id="upi-id-display">gameresports@upi</p>
+      </div>
+      <div class="space-y-3">
+        <input type="number" id="deposit-amount" placeholder="Amount (e.g. ₹50)" class="w-full bg-cardBg border border-cardBorder rounded-lg p-2.5 text-xs text-white" />
+        <input type="text" id="deposit-utr" placeholder="12-digit UPI Reference / UTR No." class="w-full bg-cardBg border border-cardBorder rounded-lg p-2.5 text-xs text-white" />
+        <button onclick="submitDepositRequest()" class="w-full py-2.5 bg-accent text-darkBg font-bold text-xs rounded-lg uppercase">
+          Submit Deposit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Scripts (Compat v9 CDN for Vanilla Web Apps) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+  <!-- Application Logic -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
