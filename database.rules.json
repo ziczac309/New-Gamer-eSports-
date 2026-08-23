@@ -1,0 +1,51 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "wallets": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "root.child('staff').child(auth.uid).child('role').val() === 'admin'"
+      }
+    },
+    "tournaments": {
+      ".read": true,
+      ".write": "root.child('staff').child(auth.uid).child('role').val() === 'admin' || root.child('staff').child(auth.uid).child('role').val() === 'staff'"
+    },
+    "registrations": {
+      "$tournamentId": {
+        ".read": "auth != null",
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid"
+        }
+      }
+    },
+    "deposits": {
+      ".read": "root.child('staff').child(auth.uid).child('role').val() === 'admin'",
+      "$depositId": {
+        ".write": "auth != null"
+      }
+    },
+    "withdrawals": {
+      ".read": "root.child('staff').child(auth.uid).child('role').val() === 'admin'",
+      "$withdrawalId": {
+        ".write": "auth != null"
+      }
+    },
+    "transactions": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null"
+      }
+    },
+    "staff": {
+      ".read": "auth != null",
+      ".write": "root.child('staff').child(auth.uid).child('role').val() === 'admin'"
+    }
+  }
+}
+
